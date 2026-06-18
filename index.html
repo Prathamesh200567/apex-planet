@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <h1>Student Task Manager</h1>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Features</a></li>
+            <li><a href="#todo">Tasks</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Home Section -->
+    <section id="home" class="home">
+        <h2>Welcome Students!</h2>
+        <p>Manage your daily tasks and improve your productivity.</p>
+    </section>
+
+
+    <!-- Features Grid -->
+    <section id="services">
+        <h2>Our Features</h2>
+
+        <div class="grid-container">
+
+            <div class="card">
+                <h3>Task Planning</h3>
+                <p>Create and organize your study tasks.</p>
+            </div>
+
+            <div class="card">
+                <h3>Time Management</h3>
+                <p>Complete your work on time.</p>
+            </div>
+
+            <div class="card">
+                <h3>Progress Tracking</h3>
+                <p>Keep track of your completed goals.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- To Do List -->
+    <section id="todo">
+        <h2>My To-Do List</h2>
+
+        <input type="text" id="taskInput" placeholder="Enter a task">
+        <button onclick="addTask()">Add Task</button>
+
+        <ul id="taskList"></ul>
+    </section>
+
+
+    <!-- Contact Form -->
+    <section id="contact">
+        <h2>Contact Us</h2>
+
+        <form id="contactForm">
+
+            <input type="text" id="name" placeholder="Enter Name">
+            <input type="email" id="email" placeholder="Enter Email">
+            <input type="text" id="mobile" placeholder="Enter Mobile Number">
+
+            <textarea id="message" placeholder="Enter Message"></textarea>
+
+            <button type="submit">
+                Submit
+            </button>
+
+        </form>
+
+        <p id="result"></p>
+
+    </section>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
