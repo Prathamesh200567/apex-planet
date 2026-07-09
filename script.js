@@ -1,66 +1,80 @@
-     // To-Do List
+const quiz = [
+{
+    question: "Which language is used for web page styling?",
+    options: ["HTML","CSS","JavaScript","Python"],
+    answer: "CSS"
+},
+{
+    question: "Which language makes web pages interactive?",
+    options: ["HTML","CSS","JavaScript","SQL"],
+    answer: "JavaScript"
+},
+{
+    question: "HTML stands for?",
+    options: [
+        "Hyper Text Markup Language",
+        "Home Tool Markup Language",
+        "High Text Machine Language",
+        "Hyper Transfer Markup Language"
+    ],
+    answer: "Hyper Text Markup Language"
+}
+];
 
-function addTask(){
+let current = 0;
 
-    let input = document.getElementById("taskInput");
-    let task = input.value;
+const question = document.getElementById("question");
+const options = document.getElementsByClassName("option");
+const result = document.getElementById("result");
+const nextBtn = document.getElementById("nextBtn");
 
-    if(task === ""){
-        alert("Please enter a task");
-        return;
+function loadQuestion(){
+    question.innerText = quiz[current].question;
+
+    for(let i=0;i<4;i++){
+        options[i].innerText = quiz[current].options[i];
     }
 
-
-    let li = document.createElement("li");
-
-    li.innerHTML = task + 
-    " <button onclick='this.parentElement.remove()'>Delete</button>";
-
-    document.getElementById("taskList").appendChild(li);
-
-    input.value = "";
+    result.innerText = "";
 }
 
-
-
-// Contact Form Validation
-
-document.getElementById("contactForm")
-.addEventListener("submit", function(event){
-
-    event.preventDefault();
-
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let mobile = document.getElementById("mobile").value;
-    let message = document.getElementById("message").value;
-
-    let result = document.getElementById("result");
-
-
-    if(name === "" || email === "" || 
-       mobile === "" || message === ""){
-
-        result.innerHTML = 
-        "Please fill all fields";
+function checkAnswer(btn){
+    if(btn.innerText === quiz[current].answer){
+        result.innerText = "Correct!";
     }
-
-    else if(!email.includes("@")){
-
-        result.innerHTML =
-        "Enter valid email";
-    }
-
-    else if(mobile.length != 10){
-
-        result.innerHTML =
-        "Mobile number should be 10 digits";
-    }
-
     else{
-
-        result.innerHTML =
-        "Form submitted successfully!";
+        result.innerText = "Wrong!";
     }
+}
 
+nextBtn.addEventListener("click",()=>{
+    current++;
+
+    if(current < quiz.length){
+        loadQuestion();
+    }
+    else{
+        question.innerText = "Quiz Finished";
+        result.innerText = "Thank You";
+        for(let i=0;i<4;i++){
+            options[i].style.display = "none";
+        }
+        nextBtn.style.display = "none";
+    }
 });
+
+loadQuestion();
+
+async function getJoke(){
+    const response = await fetch(
+        "https://official-joke-api.appspot.com/random_joke"
+    );
+
+    const data = await response.json();
+
+    document.getElementById("joke").innerHTML =
+        data.setup + "<br><br>" + data.punchline;
+} 
+
+
+
