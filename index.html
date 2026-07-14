@@ -1,36 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Interactive Quiz App</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terra Verde — Plant Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+<header class="top">
+  <h1>Terra Verde</h1>
+  <p>Houseplants and planters, chosen for small spaces.</p>
+</header>
 
-    <h1>Interactive Quiz App</h1>
+<div class="layout">
+  <aside>
+    <h3>Filter</h3>
 
-    <div class="quiz-box">
-        <h2 id="question">Question</h2>
-
-        <button class="option" onclick="checkAnswer(this)">HTML</button>
-        <button class="option" onclick="checkAnswer(this)">CSS</button>
-        <button class="option" onclick="checkAnswer(this)">JavaScript</button>
-        <button class="option" onclick="checkAnswer(this)">Python</button>
-
-        <h3 id="result"></h3>
-        <button id="nextBtn">Next Question</button>
+    <div class="filter-group">
+      <h4>Category</h4>
+      <label><input type="checkbox" class="cat-filter" value="Foliage" checked> Foliage</label>
+      <label><input type="checkbox" class="cat-filter" value="Succulent" checked> Succulent</label>
+      <label><input type="checkbox" class="cat-filter" value="Flowering" checked> Flowering</label>
+      <label><input type="checkbox" class="cat-filter" value="Planter" checked> Planters</label>
     </div>
 
-    <div class="api-box">
-        <h2>Random Joke Generator</h2>
-        <p id="joke">Click button to get a joke</p>
-        <button onclick="getJoke()">Get Joke</button>
+    <div class="filter-group">
+      <h4>Max price</h4>
+      <input type="range" id="priceRange" class="price-range" min="200" max="3000" step="100" value="3000">
+      <output id="priceOutput">₹3000</output>
     </div>
 
+    <button class="reset-btn" id="resetBtn">Reset filters</button>
+  </aside>
+
+  <main>
+    <div class="results-bar">
+      <div class="results-count" id="resultsCount"></div>
+      <div class="sort-control">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect">
+          <option value="default">Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating-desc">Rating: High to Low</option>
+          <option value="name-asc">Name: A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+  </main>
 </div>
-
 <script src="script.js"></script>
-
 </body>
 </html>
