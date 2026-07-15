@@ -1,91 +1,262 @@
-// ---- Fictional product data ----
-  const products = [
-    { id: 1, name: "Monstera Deliciosa", category: "Foliage", price: 1499, rating: 4.8, emoji: "🌿" },
-    { id: 2, name: "Golden Pothos", category: "Foliage", price: 599, rating: 4.6, emoji: "🍃" },
-    { id: 3, name: "Echeveria Elegans", category: "Succulent", price: 349, rating: 4.5, emoji: "🌵" },
-    { id: 4, name: "Zebra Haworthia", category: "Succulent", price: 299, rating: 4.3, emoji: "🪴" },
-    { id: 5, name: "Peace Lily", category: "Flowering", price: 899, rating: 4.7, emoji: "🌸" },
-    { id: 6, name: "African Violet", category: "Flowering", price: 449, rating: 4.2, emoji: "🌺" },
-    { id: 7, name: "Terracotta Planter — 8in", category: "Planter", price: 549, rating: 4.4, emoji: "🏺" },
-    { id: 8, name: "Ceramic Planter — Matte White", category: "Planter", price: 799, rating: 4.6, emoji: "🏺" },
-    { id: 9, name: "Snake Plant", category: "Foliage", price: 699, rating: 4.9, emoji: "🌱" },
-    { id: 10, name: "Jade Plant", category: "Succulent", price: 399, rating: 4.5, emoji: "🌵" },
-    { id: 11, name: "Anthurium Red", category: "Flowering", price: 1199, rating: 4.4, emoji: "🌷" },
-    { id: 12, name: "Fiber Clay Planter — Charcoal", category: "Planter", price: 999, rating: 4.7, emoji: "🏺" },
+
+
+(function () {
+  "use strict";
+
+  /* ---------- product catalogue ---------- */
+  const PRODUCTS = [
+    {
+      id: "kettle",
+      name: "Gooseneck Kettle",
+      desc: "A thin, controllable stream so the water lands exactly where you aim it.",
+      spec: "0.9L &middot; variable temp",
+      price: 68,
+      icon: iconKettle(),
+    },
+    {
+      id: "dripper",
+      name: "Ceramic Dripper",
+      desc: "Slow-draining cone that gives the water time to pull flavor from the grounds.",
+      spec: "1&ndash;4 cup",
+      price: 34,
+      icon: iconDripper(),
+    },
+    {
+      id: "filters",
+      name: "Unbleached Filters",
+      desc: "Paper filters with no bleach taste, sized for the ceramic dripper.",
+      spec: "100 count",
+      price: 9,
+      icon: iconFilters(),
+    },
+    {
+      id: "scale",
+      name: "Brew Scale",
+      desc: "Weighs coffee and water to a tenth of a gram, with a built-in pour timer.",
+      spec: "0.1g precision",
+      price: 52,
+      icon: iconScale(),
+    },
+    {
+      id: "grinder",
+      name: "Hand Grinder",
+      desc: "Forty click settings, from espresso-fine to French-press coarse.",
+      spec: "40 settings",
+      price: 89,
+      icon: iconGrinder(),
+    },
+    {
+      id: "beans",
+      name: "Single-Origin Beans",
+      desc: "Small-batch roast, shipped within a week of roasting.",
+      spec: "12oz",
+      price: 18,
+      icon: iconBeans(),
+      roast: 2, // 1=light 2=medium 3=dark, out of 3 dots
+    },
   ];
 
-  const grid = document.getElementById('productGrid');
-  const resultsCount = document.getElementById('resultsCount');
-  const catFilters = document.querySelectorAll('.cat-filter');
-  const priceRange = document.getElementById('priceRange');
-  const priceOutput = document.getElementById('priceOutput');
-  const sortSelect = document.getElementById('sortSelect');
-  const resetBtn = document.getElementById('resetBtn');
+  /* ---------- cart state ---------- */
+  let cart = {}; // id -> qty
 
-  function getActiveCategories(){
-    return Array.from(catFilters).filter(cb => cb.checked).map(cb => cb.value);
-  }
-
-  function applyFiltersAndSort(){
-    const activeCats = getActiveCategories();
-    const maxPrice = Number(priceRange.value);
-
-    let result = products.filter(p =>
-      activeCats.includes(p.category) && p.price <= maxPrice
-    );
-
-    switch(sortSelect.value){
-      case 'price-asc': result.sort((a,b) => a.price - b.price); break;
-      case 'price-desc': result.sort((a,b) => b.price - a.price); break;
-      case 'rating-desc': result.sort((a,b) => b.rating - a.rating); break;
-      case 'name-asc': result.sort((a,b) => a.name.localeCompare(b.name)); break;
-      default: break; // "Featured" keeps original order
-    }
-
-    render(result);
-  }
-
-  function render(list){
-    grid.innerHTML = '';
-    resultsCount.textContent = `${list.length} plant${list.length === 1 ? '' : 's'} found`;
-
-    if(list.length === 0){
-      grid.innerHTML = `<div class="empty">No products match these filters. Try widening your price range or selecting another category.</div>`;
-      return;
-    }
-
-    list.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product';
-      card.innerHTML = `
-        <div class="product-image">${p.emoji}</div>
-        <div class="product-body">
-          <div class="product-category">${p.category}</div>
-          <h3>${p.name}</h3>
-          <div class="product-rating">★ ${p.rating.toFixed(1)}</div>
-          <div class="product-footer">
-            <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
-            <button class="add-btn">Add</button>
-          </div>
+  function renderProducts() {
+    const grid = document.getElementById("productGrid");
+    grid.innerHTML = PRODUCTS.map((p) => `
+      <article class="product-card">
+        <div class="product-icon">${p.icon}</div>
+        <h3 class="product-name">${p.name}</h3>
+        <p class="product-desc">${p.desc}</p>
+        <p class="product-spec">${p.spec}${p.roast ? roastDots(p.roast) : ""}</p>
+        <div class="product-foot">
+          <span class="product-price">$${p.price.toFixed(2)}</span>
+          <button class="add-btn" data-id="${p.id}">Add to cart</button>
         </div>
-      `;
-      grid.appendChild(card);
+      </article>
+    `).join("");
+
+    grid.querySelectorAll(".add-btn").forEach((btn) => {
+      btn.addEventListener("click", () => addToCart(btn.dataset.id));
     });
   }
 
-  // ---- Event wiring ----
-  catFilters.forEach(cb => cb.addEventListener('change', applyFiltersAndSort));
-  priceRange.addEventListener('input', () => {
-    priceOutput.textContent = `₹${priceRange.value}`;
-    applyFiltersAndSort();
-  });
-  sortSelect.addEventListener('change', applyFiltersAndSort);
-  resetBtn.addEventListener('click', () => {
-    catFilters.forEach(cb => cb.checked = true);
-    priceRange.value = 3000;
-    priceOutput.textContent = '₹3000';
-    sortSelect.value = 'default';
-    applyFiltersAndSort();
+  function roastDots(level) {
+    let dots = "";
+    for (let i = 1; i <= 3; i++) {
+      dots += `<span class="${i <= level ? "filled" : ""}"></span>`;
+    }
+    return `<span class="roast-dots" title="Roast level">${dots}</span>`;
+  }
+
+  function addToCart(id) {
+    cart[id] = (cart[id] || 0) + 1;
+    updateCartUI();
+    openCart();
+  }
+
+  function removeFromCart(id) {
+    delete cart[id];
+    updateCartUI();
+  }
+
+  function cartCount() {
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  }
+
+  function cartSubtotal() {
+    return Object.entries(cart).reduce((sum, [id, qty]) => {
+      const p = PRODUCTS.find((x) => x.id === id);
+      return sum + (p ? p.price * qty : 0);
+    }, 0);
+  }
+
+  function updateCartUI() {
+    document.getElementById("cartCount").textContent = cartCount();
+    document.getElementById("cartSubtotal").textContent = "$" + cartSubtotal().toFixed(2);
+
+    const itemsEl = document.getElementById("cartItems");
+    const entries = Object.entries(cart);
+
+    if (entries.length === 0) {
+      itemsEl.innerHTML = `<p class="cart-empty">Your cart is empty. Add something from the shop.</p>`;
+      return;
+    }
+
+    itemsEl.innerHTML = entries.map(([id, qty]) => {
+      const p = PRODUCTS.find((x) => x.id === id);
+      return `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-name">${p.name}</div>
+            <div class="cart-item-meta">qty ${qty}</div>
+            <button class="cart-item-remove" data-id="${id}">Remove</button>
+          </div>
+          <div class="cart-item-price">$${(p.price * qty).toFixed(2)}</div>
+        </div>
+      `;
+    }).join("");
+
+    itemsEl.querySelectorAll(".cart-item-remove").forEach((btn) => {
+      btn.addEventListener("click", () => removeFromCart(btn.dataset.id));
+    });
+  }
+
+  /* ---------- cart drawer open/close ---------- */
+  const drawer = document.getElementById("cartDrawer");
+  const overlay = document.getElementById("cartOverlay");
+
+  function openCart() {
+    drawer.classList.add("open");
+    overlay.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+  }
+  function closeCart() {
+    drawer.classList.remove("open");
+    overlay.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+  }
+
+  document.getElementById("cartToggle").addEventListener("click", openCart);
+  document.getElementById("cartClose").addEventListener("click", closeCart);
+  overlay.addEventListener("click", closeCart);
+  document.getElementById("checkoutBtn").addEventListener("click", () => {
+    if (cartCount() === 0) return;
+    alert("This is a demo storefront — checkout isn't wired to a real payment processor.");
   });
 
-  applyFiltersAndSort();
+  /* ---------- mobile nav ---------- */
+  const navToggle = document.getElementById("navToggle");
+  const mainNav = document.getElementById("mainNav");
+  navToggle.addEventListener("click", () => {
+    const isOpen = mainNav.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+  mainNav.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => {
+      mainNav.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
+    })
+  );
+
+  /* ---------- brew ratio dial ---------- */
+  const ratioSlider = document.getElementById("ratioSlider");
+  const coffeeSlider = document.getElementById("coffeeSlider");
+  const ratioOut = document.getElementById("ratioOut");
+  const coffeeOut = document.getElementById("coffeeOut");
+  const waterOut = document.getElementById("waterOut");
+  const liquid = document.getElementById("liquid");
+
+  const BEAKER_TOP = 30;    // y where the beaker body starts (below neck)
+  const BEAKER_BOTTOM = 154; // y where the beaker floor is
+  const MAX_WATER = 30 * 18; // coffee(30) * ratio(18) upper bound, for fill scaling
+
+  function updateDial() {
+    const ratio = Number(ratioSlider.value);
+    const coffee = Number(coffeeSlider.value);
+    const water = ratio * coffee;
+
+    ratioOut.textContent = ratio;
+    coffeeOut.textContent = coffee;
+    waterOut.textContent = water;
+
+    const fillRatio = Math.min(water / MAX_WATER, 1);
+    const height = fillRatio * (BEAKER_BOTTOM - BEAKER_TOP);
+    liquid.setAttribute("height", height.toFixed(1));
+    liquid.setAttribute("y", (BEAKER_BOTTOM - height).toFixed(1));
+  }
+
+  ratioSlider.addEventListener("input", updateDial);
+  coffeeSlider.addEventListener("input", updateDial);
+
+  /* ---------- inline SVG icons (no external image requests) ---------- */
+  function iconKettle() {
+    return `<svg viewBox="0 0 80 80" width="70" height="70" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 34 h30 a4 4 0 0 1 4 4 v18 a10 10 0 0 1-10 10 H32 a10 10 0 0 1-10-10 Z"/>
+      <path d="M56 38 C 66 34, 70 44, 60 48"/>
+      <path d="M30 34 V22 a6 6 0 0 1 6-6 h4"/>
+      <circle cx="40" cy="16" r="3"/>
+      <path d="M26 66 v4 M52 66 v4"/>
+    </svg>`;
+  }
+  function iconDripper() {
+    return `<svg viewBox="0 0 80 80" width="66" height="66" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 22 h44 l-16 34 h-12 Z"/>
+      <path d="M30 56 v8 h20 v-8"/>
+      <path d="M24 30 h32"/>
+    </svg>`;
+  }
+  function iconFilters() {
+    return `<svg viewBox="0 0 80 80" width="62" height="62" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 20 h40 l-20 44 Z"/>
+      <path d="M24 24 h32 l-16 38 Z" opacity="0.55"/>
+      <path d="M28 28 h24 l-12 32 Z" opacity="0.3"/>
+    </svg>`;
+  }
+  function iconScale() {
+    return `<svg viewBox="0 0 80 80" width="66" height="66" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="14" y="44" width="52" height="20" rx="3"/>
+      <rect x="28" y="26" width="24" height="18" rx="2"/>
+      <path d="M34 44 v-4 M46 44 v-4"/>
+      <circle cx="40" cy="54" r="4"/>
+    </svg>`;
+  }
+  function iconGrinder() {
+    return `<svg viewBox="0 0 80 80" width="60" height="60" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="26" y="12" width="28" height="20" rx="3"/>
+      <path d="M30 32 l-4 30 a4 4 0 0 0 4 4 h20 a4 4 0 0 0 4-4 l-4-30"/>
+      <path d="M40 4 v8 M36 4 h8"/>
+    </svg>`;
+  }
+  function iconBeans() {
+    return `<svg viewBox="0 0 80 80" width="64" height="64" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M26 22 a14 18 0 1 1 0 36 a14 18 0 1 1 0-36 Z" transform="rotate(-20 26 40)"/>
+      <path d="M26 24 q6 16 0 32" transform="rotate(-20 26 40)"/>
+      <path d="M50 30 a11 15 0 1 1 0 30 a11 15 0 1 1 0-30 Z" transform="rotate(15 50 45)"/>
+      <path d="M50 32 q5 13 0 26" transform="rotate(15 50 45)"/>
+    </svg>`;
+  }
+
+  /* ---------- init ---------- */
+  renderProducts();
+  updateCartUI();
+  updateDial();
+})();
