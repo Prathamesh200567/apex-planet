@@ -3,57 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terra Verde — Plant Shop</title>
+<title>Kettle & Grain — Pour-Over Equipment</title>
+<meta name="description" content="Gooseneck kettles, drippers, scales, and single-origin beans for the pour-over ritual.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header class="top">
-  <h1>Terra Verde</h1>
-  <p>Houseplants and planters, chosen for small spaces.</p>
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="wrap header-row">
+    <a href="#top" class="logo">Kettle <span class="amp">&amp;</span> Grain</a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#shop">Shop</a>
+      <a href="#brew-guide">Brew guide</a>
+      <a href="#ratio">Ratio dial</a>
+      <a href="#footer">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="cart-btn" id="cartToggle" aria-label="Open cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h2l2.2 12.2a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<div class="layout">
-  <aside>
-    <h3>Filter</h3>
-
-    <div class="filter-group">
-      <h4>Category</h4>
-      <label><input type="checkbox" class="cat-filter" value="Foliage" checked> Foliage</label>
-      <label><input type="checkbox" class="cat-filter" value="Succulent" checked> Succulent</label>
-      <label><input type="checkbox" class="cat-filter" value="Flowering" checked> Flowering</label>
-      <label><input type="checkbox" class="cat-filter" value="Planter" checked> Planters</label>
-    </div>
-
-    <div class="filter-group">
-      <h4>Max price</h4>
-      <input type="range" id="priceRange" class="price-range" min="200" max="3000" step="100" value="3000">
-      <output id="priceOutput">₹3000</output>
-    </div>
-
-    <button class="reset-btn" id="resetBtn">Reset filters</button>
-  </aside>
-
-  <main>
-    <div class="results-bar">
-      <div class="results-count" id="resultsCount"></div>
-      <div class="sort-control">
-        <label for="sortSelect">Sort by</label>
-        <select id="sortSelect">
-          <option value="default">Featured</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating-desc">Rating: High to Low</option>
-          <option value="name-asc">Name: A–Z</option>
-        </select>
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap hero-row">
+    <div class="hero-copy">
+      <p class="eyebrow">Home brewing, done deliberately</p>
+      <h1>Precision is <em>the whole point.</em></h1>
+      <p class="hero-sub">A gram off and the cup tastes different. We sell the gear that lets you control the variables — kettle temperature, grind size, and the ratio of water to coffee — so the only thing left to chase is the bean.</p>
+      <div class="hero-cta">
+        <a href="#shop" class="btn btn-primary">Shop equipment</a>
+        <a href="#ratio" class="btn btn-ghost">Try the ratio dial</a>
       </div>
     </div>
 
-    <div class="grid" id="productGrid"></div>
-  </main>
-</div>
+    <div class="hero-dial" id="ratio">
+      <div class="dial-card">
+        <p class="dial-label">Brew ratio dial</p>
+        <div class="dial-readout">
+          <div class="readout-item">
+            <span class="readout-num" id="coffeeOut">20</span>
+            <span class="readout-unit">g coffee</span>
+          </div>
+          <span class="readout-colon">:</span>
+          <div class="readout-item">
+            <span class="readout-num" id="waterOut">320</span>
+            <span class="readout-unit">ml water</span>
+          </div>
+        </div>
+
+        <svg class="beaker" viewBox="0 0 120 160" width="120" height="160" aria-hidden="true">
+          <path d="M30 10 H90 V30 L100 145 A8 8 0 0 1 92 154 H28 A8 8 0 0 1 20 145 L30 30 Z" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
+          <clipPath id="beakerClip">
+            <path d="M30 10 H90 V30 L100 145 A8 8 0 0 1 92 154 H28 A8 8 0 0 1 20 145 L30 30 Z"/>
+          </clipPath>
+          <rect id="liquid" x="18" y="60" width="84" height="96" fill="var(--amber)" clip-path="url(#beakerClip)"/>
+          <line x1="30" y1="10" x2="24" y2="30" stroke="var(--clay)" stroke-width="2"/>
+          <line x1="90" y1="10" x2="96" y2="30" stroke="var(--clay)" stroke-width="2"/>
+        </svg>
+
+        <label class="dial-slider-label" for="ratioSlider">Ratio — 1 : <span id="ratioOut">16</span></label>
+        <input type="range" id="ratioSlider" min="14" max="18" step="1" value="16">
+
+        <label class="dial-slider-label" for="coffeeSlider">Coffee dose</label>
+        <input type="range" id="coffeeSlider" min="10" max="30" step="1" value="20">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BREW GUIDE ============ -->
+<section class="brew-guide" id="brew-guide">
+  <div class="wrap">
+    <h2>Three steps, every time</h2>
+    <p class="section-sub">The method doesn't change. The gear just makes it repeatable.</p>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step-num">01</span>
+        <h3>Bloom</h3>
+        <p>Pour twice the coffee's weight in water. Wait thirty seconds while it degasses. Skip this and the rest of the pour extracts unevenly.</p>
+      </li>
+      <li class="step">
+        <span class="step-num">02</span>
+        <h3>Pour</h3>
+        <p>Add the remaining water in slow, steady circles. A gooseneck kettle keeps the stream thin enough to control where it lands.</p>
+      </li>
+      <li class="step">
+        <span class="step-num">03</span>
+        <h3>Rest</h3>
+        <p>Let the last of the water drain fully before you lift the dripper. Total brew time: three to four minutes, start to finish.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ SHOP ============ -->
+<section class="shop" id="shop">
+  <div class="wrap">
+    <div class="shop-heading">
+      <h2>The gear</h2>
+      <p class="section-sub">Six pieces. Nothing you don't need.</p>
+    </div>
+
+    <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="footer">
+  <div class="wrap footer-row">
+    <div>
+      <p class="logo footer-logo">Kettle <span class="amp">&amp;</span> Grain</p>
+      <p class="footer-note">"The best cup is the one you can make the same way twice."</p>
+    </div>
+    <div class="footer-links">
+      <a href="#shop">Shop</a>
+      <a href="#brew-guide">Brew guide</a>
+      <a href="#ratio">Ratio dial</a>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2026 Kettle & Grain. Demo storefront built for a training capstone.</p>
+</footer>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-drawer-head">
+    <h2>Your cart</h2>
+    <button id="cartClose" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">$0.00</span>
+    </div>
+    <button class="btn btn-primary btn-block" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
 <script src="script.js"></script>
 </body>
 </html>
